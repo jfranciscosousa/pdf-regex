@@ -1,59 +1,27 @@
 <!-- @hmr:keep-all -->
 <script lang="ts">
-  import Input from "./components/Input.svelte";
-  import stringtoregex from "./lib/stringtoregex";
-  import pdfStore from "./stores/pdfStore";
-
-  let url: string;
-
-  let regexString = "/test string/gi";
-  let regex: RegExp;
-  let regexError = false;
-
-  $: {
-    try {
-      if (!regexString) regex = null;
-      else regex = stringtoregex(regexString);
-
-      regexError = false;
-
-      console.log(regex);
-    } catch (e) {
-      regexError = true;
-      regex = null;
-    }
-  }
+  import DocumentArea from "./components/DocumentArea.svelte";
+  import DocumentInput from "./components/DocumentInput.svelte";
+  import RegexArea from "./components/RegexArea.svelte";
+  import appStore from "./stores/appStore";
 </script>
 
-{#if $pdfStore.document}
+{#if $appStore.document}
   <div class="parent h-screen">
-    <div class="div1 border-black border-2 relative">
-      <object
-        data={url}
-        type="application/pdf"
-        class="w-full h-full"
-        title="Original document"
-      >
-        <iframe src={url} class="w-full h-full" title="Original document">
-          <p>This browser does not support PDF!</p>
-        </iframe>
-      </object>
+    <div class="div1 border-black border-2">
+      <DocumentArea />
     </div>
-    <div class="div2 border-black border-2 highlight-zone">
-      {@html $pdfStore.text.replace(regex, (string) => `<b>${string}</b>`)}
+    <div class="div2 border-black border-2">
+      <RegexArea />
     </div>
     <div class="div3 border-black border-2">
-      <textarea
-        class="h-full w-full p-4 resize-none tracking-wide"
-        class:text-red-600="{regexError}"
-        bind:value={regexString}
-      />
+      <RegexArea />
     </div>
   </div>
-{:else if $pdfStore.loading}
+{:else if $appStore.loading}
   <p>Loading!</p>
 {:else}
-  <Input bind:url />
+  <DocumentInput />
 {/if}
 
 <style lang="postcss">
@@ -88,11 +56,5 @@
   .div3 {
     grid-area: 2 / 1 / 3 / 3;
     overflow: hidden;
-  }
-
-  .highlight-zone {
-    :global(b) {
-      @apply bg-blue-200;
-    }
   }
 </style>
