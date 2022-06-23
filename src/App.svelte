@@ -41,10 +41,6 @@
     @media screen(md) {
       display: none;
     }
-
-    * :global(canvas) {
-      margin: 0 auto;
-    }
   }
   .div2 {
     grid-area: 1 / 2 / 2 / 3;
