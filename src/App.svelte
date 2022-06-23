@@ -2,6 +2,7 @@
 <script lang="ts">
   import DocumentArea from "./components/DocumentArea.svelte";
   import DocumentInput from "./components/DocumentInput.svelte";
+  import HighlightArea from "./components/HighlightArea.svelte";
   import RegexArea from "./components/RegexArea.svelte";
   import appStore from "./stores/appStore";
 </script>
@@ -12,7 +13,7 @@
       <DocumentArea />
     </div>
     <div class="div2 border-black border-2">
-      <RegexArea />
+      <HighlightArea />
     </div>
     <div class="div3 border-black border-2">
       <RegexArea />
