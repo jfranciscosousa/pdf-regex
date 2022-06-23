@@ -1,21 +1,25 @@
 <!-- @hmr:keep-all -->
 <script lang="ts">
   import Input from "./components/Input.svelte";
+  import stringtoregex from "./lib/stringtoregex";
   import pdfStore from "./stores/pdfStore";
 
   let url: string;
 
-  let regexString: string;
+  let regexString = "/test string/gi";
   let regex: RegExp;
+  let regexError = false;
 
   $: {
-    console.log(regexString, regex, !regexString);
     try {
       if (!regexString) regex = null;
-      else regex = new RegExp(regexString, "g");
+      else regex = stringtoregex(regexString);
+
+      regexError = false;
 
       console.log(regex);
     } catch (e) {
+      regexError = true;
       regex = null;
     }
   }
@@ -24,21 +28,24 @@
 {#if $pdfStore.document}
   <div class="parent h-screen">
     <div class="div1 border-black border-2 relative">
-      <object data={url} type="application/pdf" class="w-full h-full">
-        <iframe src={url} class="w-full h-full">
+      <object
+        data={url}
+        type="application/pdf"
+        class="w-full h-full"
+        title="Original document"
+      >
+        <iframe src={url} class="w-full h-full" title="Original document">
           <p>This browser does not support PDF!</p>
         </iframe>
       </object>
     </div>
     <div class="div2 border-black border-2 highlight-zone">
-      {@html $pdfStore.text.replace(
-        regex,
-        (string) => `<b>${string}</b>`
-      )}
+      {@html $pdfStore.text.replace(regex, (string) => `<b>${string}</b>`)}
     </div>
     <div class="div3 border-black border-2">
       <textarea
-        class="h-full w-full p-4 resize-none"
+        class="h-full w-full p-4 resize-none tracking-wide"
+        class:text-red-600="{regexError}"
         bind:value={regexString}
       />
     </div>
