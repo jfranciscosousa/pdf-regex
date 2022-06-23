@@ -3,7 +3,6 @@ import importPdfjs, { PDFJS } from "../lib/importPdfjs";
 
 import { writable } from "svelte/store";
 import type { PDFDocumentProxy } from "pdfjs-dist";
-import stringtoregex from "../lib/stringtoregex";
 
 interface State {
   loading?: boolean;
@@ -11,7 +10,6 @@ interface State {
   url?: string;
   document?: PDFDocumentProxy;
   text?: string;
-  regexString?: string;
   regexError?: boolean;
   regex?: RegExp;
 }
@@ -29,8 +27,7 @@ function createAppStore() {
     update((state) => ({ ...state, loading: false, pdfjs, url, document, text }));
   }
 
-  async function handleRegexChange(regexString: string) {
-    console.log(regexString);
+  async function handleRegexChange(regexString: string, flagsString: string) {
     if (!regexString)
       update((state) => ({
         ...state,
@@ -43,7 +40,7 @@ function createAppStore() {
         update((state) => ({
           ...state,
           regexString,
-          regex: stringtoregex(regexString),
+          regex: new RegExp(regexString, flagsString),
           regexError: false,
         }));
       } catch (error) {
