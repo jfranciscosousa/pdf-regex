@@ -1,7 +1,4 @@
-import * as PDFJS from "pdfjs-dist";
-import PDFJSWorker from "pdfjs-dist/build/pdf.worker?url";
-
-PDFJS.GlobalWorkerOptions.workerSrc = PDFJSWorker;
+import type { PDFDocumentProxy } from "pdfjs-dist";
 
 const getPageText = async (pdf: any, pageNo: number) => {
   const page = await pdf.getPage(pageNo);
@@ -10,7 +7,7 @@ const getPageText = async (pdf: any, pageNo: number) => {
   return pageText;
 };
 
-export async function pdf2Text(pdf: PDFJS.PDFDocumentProxy): Promise<string> {
+export async function pdf2Text(pdf: PDFDocumentProxy): Promise<string> {
   const maxPages = pdf.numPages;
   const pageTextPromises = [];
   for (let pageNo = 1; pageNo <= maxPages; pageNo += 1) {

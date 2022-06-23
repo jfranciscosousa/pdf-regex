@@ -1,14 +1,13 @@
-import * as PDFJS from "pdfjs-dist";
-import PDFJSWorker from "pdfjs-dist/build/pdf.worker?url";
 import { pdf2Text } from "../lib/pdfutils";
+import importPdfjs, { PDFJS } from "../lib/importPdfjs";
 
 import { writable } from "svelte/store";
-
-PDFJS.GlobalWorkerOptions.workerSrc = PDFJSWorker;
+import type { PDFDocumentProxy } from "pdfjs-dist";
 
 interface State {
   loading?: boolean;
-  document?: PDFJS.PDFDocumentProxy;
+  pdfjs?: PDFJS;
+  document?: PDFDocumentProxy;
   text?: string;
 }
 
@@ -18,10 +17,11 @@ function createPdfStore() {
   async function loadDocument(url: string) {
     set({ loading: true });
 
-    const document = await PDFJS.getDocument(url).promise;
+    const pdfjs = await importPdfjs();
+    const document = await pdfjs.getDocument(url).promise;
     const text = await pdf2Text(document);
 
-    update((state) => ({ ...state, document, text }));
+    update((state) => ({ ...state, pdfjs, document, text }));
   }
 
   return {
