@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import appStore from "../stores/appStore";
 </script>
 
@@ -9,7 +9,7 @@
   )}
 </div>
 
-<style>
+<style lang="postcss">
   .highlight-zone {
     :global(b) {
       @apply bg-blue-200;

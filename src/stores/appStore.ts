@@ -17,7 +17,7 @@ interface State {
 }
 
 function createAppStore() {
-  const { subscribe, set, update } = writable<State>({});
+  const { subscribe, update } = writable<State>({});
 
   async function loadDocument(url: string) {
     update((state) => ({ ...state, loading: true }));
@@ -30,7 +30,7 @@ function createAppStore() {
   }
 
   async function handleRegexChange(regexString: string) {
-    console.log(regexString)
+    console.log(regexString);
     if (!regexString)
       update((state) => ({
         ...state,

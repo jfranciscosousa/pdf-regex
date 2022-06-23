@@ -1,9 +1,10 @@
 import type { PDFDocumentProxy } from "pdfjs-dist";
+import type { TextItem } from "pdfjs-dist/types/src/display/api";
 
-const getPageText = async (pdf: any, pageNo: number) => {
+const getPageText = async (pdf: PDFDocumentProxy, pageNo: number) => {
   const page = await pdf.getPage(pageNo);
   const tokenizedText = await page.getTextContent();
-  const pageText = tokenizedText.items.map((token) => token.str).join("");
+  const pageText = tokenizedText.items.map((token: TextItem) => token.str).join("");
   return pageText;
 };
 
