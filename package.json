@@ -23,6 +23,7 @@
     "vite": "^2.9.9"
   },
   "dependencies": {
-    "pdfjs-dist": "^2.14.305"
+    "pdfjs-dist": "^2.14.305",
+    "postcss-nested": "^5.0.6"
   }
 }
