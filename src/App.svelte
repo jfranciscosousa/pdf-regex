@@ -6,14 +6,18 @@
   let url: string;
 
   let regexString: string;
-  let regex = new RegExp("", "g");
+  let regex: RegExp;
 
   $: {
+    console.log(regexString, regex, !regexString);
     try {
-      regex = new RegExp(regexString, "g");
+      if (!regexString) regex = null;
+      else regex = new RegExp(regexString, "g");
 
       console.log(regex);
-    } catch (e) {}
+    } catch (e) {
+      regex = null;
+    }
   }
 </script>
 
@@ -26,10 +30,10 @@
         </iframe>
       </object>
     </div>
-    <div class="div2 border-black border-2">
+    <div class="div2 border-black border-2 highlight-zone">
       {@html $pdfStore.text.replace(
         regex,
-        (string) => `<b class="bg-blue-200">${string}</b>`
+        (string) => `<b>${string}</b>`
       )}
     </div>
     <div class="div3 border-black border-2">
@@ -77,5 +81,11 @@
   .div3 {
     grid-area: 2 / 1 / 3 / 3;
     overflow: hidden;
+  }
+
+  .highlight-zone {
+    :global(b) {
+      @apply bg-blue-200;
+    }
   }
 </style>
