@@ -1,5 +1,5 @@
 <script lang="ts">
-  import appStore from "../stores/appStore";
+  import appStore from "~/stores/appStore";
 
   let url = "";
 

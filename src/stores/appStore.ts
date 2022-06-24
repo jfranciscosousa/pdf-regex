@@ -1,9 +1,8 @@
 import debounce from "lodash/debounce";
-import { pdf2Text } from "../lib/pdfutils";
-import importPdfjs, { PDFJS } from "../lib/importPdfjs";
-
 import { writable } from "svelte/store";
 import type { PDFDocumentProxy } from "pdfjs-dist";
+import { pdf2Text } from "~/lib/pdfutils";
+import importPdfjs, { PDFJS } from "~/lib/importPdfjs";
 
 interface State {
   loading?: boolean;
