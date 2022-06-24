@@ -25,6 +25,10 @@ function createAppStore() {
     const text = await pdf2Text(document);
 
     update((state) => ({ ...state, loading: false, pdfjs, url, document, text }));
+
+    window.onbeforeunload = function () {
+      return "Are you sure you want to leave the page?";
+    };
   }
 
   async function handleRegexChange(regexString: string, flagsString: string) {
