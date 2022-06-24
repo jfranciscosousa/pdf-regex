@@ -1,3 +1,4 @@
+import debounce from "lodash/debounce";
 import { pdf2Text } from "../lib/pdfutils";
 import importPdfjs, { PDFJS } from "../lib/importPdfjs";
 
@@ -12,6 +13,7 @@ interface State {
   text?: string;
   regexError?: boolean;
   regex?: RegExp;
+  highlightedText?: string;
 }
 
 function createAppStore() {
@@ -24,12 +26,31 @@ function createAppStore() {
     const document = await pdfjs.getDocument(url).promise;
     const text = await pdf2Text(document);
 
-    update((state) => ({ ...state, loading: false, pdfjs, url, document, text }));
+    update((state) => ({
+      ...state,
+      loading: false,
+      pdfjs,
+      url,
+      document,
+      text,
+      highlightedText: text,
+    }));
 
     window.onbeforeunload = function () {
       return "Are you sure you want to leave the page?";
     };
   }
+
+  const highlightText = debounce(
+    () =>
+      update((state) => {
+        return {
+          ...state,
+          highlightedText: state.text.replace(state.regex, (string) => `<b>${string}</b>`),
+        };
+      }),
+    500,
+  );
 
   async function handleRegexChange(regexString: string, flagsString: string) {
     if (!regexString)
@@ -38,6 +59,7 @@ function createAppStore() {
         regexString,
         regex: null,
         regexError: false,
+        highlightedText: state.text,
       }));
     else {
       try {
@@ -47,6 +69,8 @@ function createAppStore() {
           regex: new RegExp(regexString, flagsString),
           regexError: false,
         }));
+
+        highlightText();
       } catch (error) {
         update((state) => ({
           ...state,
